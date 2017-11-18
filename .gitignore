@@ -11,6 +11,9 @@
 
 dist/
 /dist
+.idea/
+
+yarn.lock
 
 # misc
 .DS_Store
