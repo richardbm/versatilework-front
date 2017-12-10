@@ -6,10 +6,12 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import teal from 'material-ui/colors/teal';
+import { Provider } from 'react-redux';
 import {
     HashRouter as Router,
     Route,
-} from 'react-router-dom'
+} from 'react-router-dom';
+import store from './store/configureStore';
 
 const theme = createMuiTheme({
     palette: {
@@ -20,8 +22,10 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
     <MuiThemeProvider theme={theme}>
-        <Router>
-            <Route path="/" name="Home" component={App} />
-        </Router>
+        <Provider store={store}>
+            <Router>
+                <Route path="/" name="Home" component={App} />
+            </Router>
+        </Provider>
     </MuiThemeProvider>, document.getElementById('root'));
-registerServiceWorker();
+//registerServiceWorker();

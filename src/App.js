@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import SwipeableViews from 'react-swipeable-views';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import ExploreIcon from 'material-ui-icons/Explore';
@@ -14,6 +12,9 @@ import Notifications from 'material-ui-icons/Notifications';
 import ExploreView from './views/ExploreView';
 import NotificationView from './views/NotificationsView';
 import AddView from "./views/AddView";
+import { connect } from 'react-redux';
+import { CHANGE_MAIN_TAB } from './constants/actionTypes';
+
 import {
     Route,
     Link,
@@ -41,30 +42,21 @@ const styles = theme => ({
 });
 
 
+const mapStateToProps = state => ({
+    tab: state.commons.tab,
+});
+
+const mapDispatchToProps = dispatch => ({
+    onChangeTab: (event, tab) =>
+        dispatch({ type: CHANGE_MAIN_TAB, tab }),
+});
+
 class App extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: 0,
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleChangeIndex = this.handleChangeIndex.bind(this);
-    }
-
-    handleChange(event, value) {
-        this.setState({ value });
-    };
-
-    handleChangeIndex(index) {
-        this.setState({ value: index });
-
-    };
 
 
     render() {
         const { classes, theme } = this.props;
-        console.log(this.props.path);
 
         return (
                 <span>
@@ -76,7 +68,6 @@ class App extends Component {
                             <Route extact path='/add' component={AddView}/>
                             <Route extact path='/notifications' component={NotificationView}/>
                             <Route path='/' render={() => (<Redirect to="/explore"/>)}/>
-
                           </Switch>
 
                         </div>
@@ -85,8 +76,8 @@ class App extends Component {
                             bottom: 0
                         }}>
                             <Tabs
-                                value={this.props.history.location.pathname}
-                                onChange={this.handleChange}
+                                value={this.props.location.pathname}
+                                onChange={this.props.onChangeTab}
                                 fullWidth
                                 indicatorColor="accent"
                                 textColor="accent"
@@ -107,4 +98,4 @@ App.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
 };
-export default withStyles(styles, { withTheme: true })(App);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(App));

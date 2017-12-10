@@ -1,5 +1,6 @@
 import React from 'react';
 import Explore from '../components/Explore';
+import { connect } from 'react-redux';
 
 
 class ExploreView extends React.Component {

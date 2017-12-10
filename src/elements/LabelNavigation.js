@@ -26,22 +26,21 @@ class LabelNavigation extends React.Component {
 
 
     handleChange(event, value) {
-        this.setState({ value });
+        this.props.onChangeTab(value);
     };
 
     render() {
         const { classes } = this.props;
-        const { value } = this.state;
 
         return (
             <span>
                 <BottomNavigation
-                    value={value}
+                    value={this.props.tab}
                     onChange={this.handleChange}
                     className={classes.root}>
-                    <BottomNavigationButton label="Recents" value="recents" icon={<RestoreIcon />} />
-                    <BottomNavigationButton label="Favorites" value="favorites" icon={<FavoriteIcon />} />
-                    <BottomNavigationButton label="Nearby" value="nearby" icon={<LocationOnIcon />} />
+                    <BottomNavigationButton label="Offers" value="offer" icon={<RestoreIcon />} />
+                    <BottomNavigationButton label="All" value="all" icon={<FavoriteIcon />} />
+                    <BottomNavigationButton label="Demands" value="demand" icon={<LocationOnIcon />} />
                 </BottomNavigation>
                 <Divider />
             </span>

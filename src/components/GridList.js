@@ -53,7 +53,7 @@ function TitlebarGridList(props) {
                         </IconButton>
                     </Subheader>
                 </GridListTile>
-                {tileData.map(tile => (
+                {props.dataActivity.map(tile => (
                     <GridListTile key={tile.img}>
                         <img src={tile.img} alt={tile.title} />
                         <GridListTileBar
