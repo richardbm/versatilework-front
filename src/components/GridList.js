@@ -6,7 +6,9 @@ import Subheader from 'material-ui/List/ListSubheader';
 import IconButton from 'material-ui/IconButton';
 import InfoIcon from 'material-ui-icons/Info';
 import Replay from 'material-ui-icons/Replay';
-import tileData from './tileData';
+import CategoryIconComponent from "./CategoryIcon";
+import { DEMAND } from '../constants/constExplorer';
+import  Moment  from 'react-moment';
 
 const styles = theme => ({
     container: {
@@ -47,26 +49,57 @@ function TitlebarGridList(props) {
             <GridList cellHeight={180} className={classes.gridList}>
                 <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
                     <Subheader component="div">December
-
-                        <IconButton style={{position: "absolute", right: 0, top: 0}}>
-                            <Replay />
+                        <IconButton
+                            onClick={props.loadMoreEntries}
+                            style={{position: "absolute", right: 0, top: 0}}>
+                            <Replay  />
                         </IconButton>
                     </Subheader>
                 </GridListTile>
-                {props.dataActivity.map(tile => (
-                    <GridListTile key={tile.img}>
-                        <img src={tile.img} alt={tile.title} />
+                {props.data.loading === false ? props.data.activity.map(obj => (
+                    <GridListTile
+                        style={{
+                            backgroundColor: obj.category.backgroundColor
+                        }}
+                        key={obj.id} cols={props.tab == 'ALL' ? 1 : 2}
+                        rows={props.tab == 'ALL' ? 1 : 2}>
+
+                        { obj.firstImage ?
+                            <img src={obj.firstImage} alt={obj.title}/>
+                            :
+                            <CategoryIconComponent
+                                style={{
+                                    fontSize: "500px",
+                                    position: "relative",
+                                    width: "100%",
+                                    height: "100%",
+                                    verticalAlign: "middle",
+                                    color: obj.category.iconColor
+                                }}
+                                icon={obj.category.icon}
+                                color={obj.category.iconColor} />
+                        }
                         <GridListTileBar
-                            title={tile.title}
-                            subtitle={<span>by: {tile.author}</span>}
+                            style={obj.typeActivity === DEMAND ? {
+                                    backgroundColor: "rgba(0,150,136,0.8)"
+                                }
+                                : {
+                                    backgroundColor: "rgba(255,64,129,0.8)"
+                                }
+                            }
+                            title={<strong>{obj.title}</strong>}
+                            subtitle={<strong><Moment fromNow date={obj.date}/> </strong>}
                             actionIcon={
                                 <IconButton>
-                                    <InfoIcon color="rgba(255, 255, 255, 0.54)" />
+                                    <CategoryIconComponent icon={obj.category.icon} color="rgba(255, 255, 255, 0.54)" />
                                 </IconButton>
                             }
                         />
                     </GridListTile>
-                ))}
+                )) :
+                    <p>Loading</p>
+
+                }
             </GridList>
         </div>
     );

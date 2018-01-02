@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import BottomNavigation, { BottomNavigationButton } from 'material-ui/BottomNavigation';
-import RestoreIcon from 'material-ui-icons/Restore';
-import FavoriteIcon from 'material-ui-icons/Favorite';
-import LocationOnIcon from 'material-ui-icons/LocationOn';
+import HearingIcon from 'material-ui-icons/Hearing';
+import ExploreIcon from 'material-ui-icons/Explore';
+import RecordVoiceOverIcon from 'material-ui-icons/RecordVoiceOver';
 import Divider from 'material-ui/Divider';
 
 const styles = {
@@ -38,9 +38,9 @@ class LabelNavigation extends React.Component {
                     value={this.props.tab}
                     onChange={this.handleChange}
                     className={classes.root}>
-                    <BottomNavigationButton label="Offers" value="offer" icon={<RestoreIcon />} />
-                    <BottomNavigationButton label="All" value="all" icon={<FavoriteIcon />} />
-                    <BottomNavigationButton label="Demands" value="demand" icon={<LocationOnIcon />} />
+                    <BottomNavigationButton label="Supply" value="SU" icon={<RecordVoiceOverIcon />} />
+                    <BottomNavigationButton label="All" value="ALL" icon={<ExploreIcon />} />
+                    <BottomNavigationButton label="Demand" value="DE" icon={<HearingIcon />} />
                 </BottomNavigation>
                 <Divider />
             </span>

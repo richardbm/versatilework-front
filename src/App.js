@@ -53,8 +53,6 @@ const mapDispatchToProps = dispatch => ({
 
 class App extends Component {
 
-
-
     render() {
         const { classes, theme } = this.props;
 

@@ -19,9 +19,27 @@ class AddComponent extends React.Component {
 
     render() {
         const { classes } = this.props;
+        let titleStyle = {
+            color: "gray",
+            position: "relative",
+            margin: 0,
+            padding:0,
+            fontSize: "19px"
+
+        };
         return (
             <Button raised className={classes.button}>
-                To offer help
+                <div style={{
+                    height:"100px",
+                    width:"100px"
+                }}>
+                    {this.props.icon}
+
+                    <h3 style={titleStyle}>
+                        {this.props.title}
+                    </h3>
+                </div>
+
             </Button>
         );
     }

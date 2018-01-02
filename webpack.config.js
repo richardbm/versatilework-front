@@ -42,8 +42,14 @@ module.exports = {
                     name: "files/[name].[ext]",
                 },
             },
-
+            {
+                test: /\.(graphql|gql)$/,
+                exclude: /node_modules/,
+                include: '/src/',
+                loader: 'graphql-tag/loader',
+            },
         ],
+
 
     },
     // add this line

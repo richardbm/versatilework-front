@@ -1,5 +1,7 @@
 import React from 'react';
 import AddComponent from '../components/AddComponent';
+import HearingIcon from 'material-ui-icons/Hearing';
+import RecordVoiceOverIcon from 'material-ui-icons/RecordVoiceOver';
 
 
 class AddView extends React.Component {
@@ -11,10 +13,20 @@ class AddView extends React.Component {
 
     render() {
 
+        let iconStyle = {
+            width: "75px",
+            height: "75px",
+            color: "gray",
+            position: "relative",
+        };
         return (
             <span style={{position: "relative", maxHeight: 100}}>
-                <AddComponent />
-                <AddComponent />
+                <AddComponent
+                    title="Supply"
+                    icon={<RecordVoiceOverIcon style={iconStyle}/>}/>
+                <AddComponent
+                    title="Demand"
+                    icon={<HearingIcon style={iconStyle} />}/>
             </span>
         );
     }
