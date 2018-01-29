@@ -21,6 +21,7 @@ import {
     Redirect,
     Switch
 } from 'react-router-dom'
+import ProfileView from "./views/ProfileView";
 
 function TabContainer({ children, dir }) {
     return (
@@ -65,6 +66,10 @@ class App extends Component {
                             <Route extact path='/explore' component={ExploreView}/>
                             <Route extact path='/add' component={AddView}/>
                             <Route extact path='/notifications' component={NotificationView}/>
+                            <Route extact path='/profile' component={ProfileView}/>
+                            <Route extact path='/add-supply' component={NotificationView}/>
+                            <Route extact path='/add-supply' component={NotificationView}/>
+
                             <Route path='/' render={() => (<Redirect to="/explore"/>)}/>
                           </Switch>
 
@@ -77,8 +82,8 @@ class App extends Component {
                                 value={this.props.location.pathname}
                                 onChange={this.props.onChangeTab}
                                 fullWidth
-                                indicatorColor="accent"
-                                textColor="accent"
+                                indicatorColor="#009688"
+                                textColor="#009688"
                                 centered>
                                 <Tab icon={<ExploreIcon />} component={Link} to="/explore" value="/explore" />
                                 <Tab icon={<DateRange />} component={Link} to="/calendar" value="/calendar" />

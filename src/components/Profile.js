@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import LabelNavigation from '../elements/LabelNavigation';
-import GridList from './GridList';
 import {
     APPLY_FILTER_EXPLORE,
     EXPLORE_PAGE_LOADED,
@@ -13,8 +11,33 @@ import gql from 'graphql-tag';
 import {
     graphql,
 } from 'react-apollo';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
+import Paper from 'material-ui/Paper';
+import Typography from 'material-ui/Typography';
+import Avatar from 'material-ui/Avatar';
+import classNames from 'classnames';
+import LoginFacebookButton from './LoginFacebookButton.js';
 
-const Promise = global.Promise;
+const styles = theme => ({
+    root: theme.mixins.gutters({
+        marginTop: "0px",
+        height: "200px",
+        paddingBottom: 16,
+    }),
+    row: {
+        display: 'flex',
+        justifyContent: 'center',
+        paddingTop: 15,
+    },
+    avatar: {
+        margin: 10,
+    },
+    bigAvatar: {
+        width: 120,
+        height: 120,
+    },
+});
 
 const mapStateToProps = state => ({
     ...state.explorer,
@@ -32,7 +55,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-class Explore extends Component {
+class Profile extends Component {
 
     constructor(props){
         super(props);
@@ -67,22 +90,32 @@ class Explore extends Component {
 
 
     render() {
+        const { classes } = this.props;
         let activity = {
             activity: this.props.data.activity,
             loading: this.props.data.loading
         };
         return (
-            <span style={{height: 100, maxHeight: 100}}>
-                <LabelNavigation
-                    tab={this.props.tab}
-                    onChangeTab={this.props.onChangeTab}/>
-                    <GridList
-                        tab={this.props.tab}
-                        data={activity}
-                        loadNewEntries={this.props.data.loadNewEntries}
-                    />
+            <div>
+                <Paper className={classes.root} elevation={4}>
+                    <div className={classes.row}>
+                      <Avatar
+                          alt="Adelle Charles"
+                          src="/static/images/uxceo-128.jpg"
+                          className={classNames(classes.avatar, classes.bigAvatar)}
+                      />
+                    </div>
+                    <Typography type="headline" component="h3">
+                      This is a sheet of paper.
+                    </Typography>
+                    <Typography component="p">
+                      Paper can be used to  surface or other elements for your application.
+                    </Typography>
+                    <LoginFacebookButton />
 
-            </span>
+                </Paper>
+
+            </div>
         );
     }
 }
@@ -175,6 +208,11 @@ const queryOptions = {
     },
 };
 
-const ExplorerWithData = graphql(exploreListQuery, queryOptions)(Explore);
+Profile.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExplorerWithData);
+
+const ProfileWithData = graphql(exploreListQuery, queryOptions)(withStyles(styles)(Profile));
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileWithData);

@@ -12,6 +12,10 @@ const typeDef = `
         type: TypeActivity
     }
     
+    type LoggedInUser {
+        id: ID!
+    }
+    
     type Query {
         activity: [Activity]
     }

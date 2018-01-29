@@ -2,12 +2,14 @@ import React from 'react';
 import Button from 'material-ui/Button';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     button: {
         height: "42vh",
         width: "100%",
         position: "relative",
+        backgroundColor: "rgba(231, 238, 210, 0.5)",
     },
 });
 
@@ -28,19 +30,24 @@ class AddComponent extends React.Component {
 
         };
         return (
-            <Button raised className={classes.button}>
-                <div style={{
-                    height:"100px",
-                    width:"100px"
-                }}>
-                    {this.props.icon}
+            <span>
+                <Button
+                    component={Link} to={this.props.link} value={this.props.link}
+                    raised className={classes.button}>
+                    <div style={{
+                        height:"100px",
+                        width:"100px",
+                        color: "rgba(231, 238, 210, 0.5)",
+                    }}>
+                        {this.props.icon}
 
-                    <h3 style={titleStyle}>
-                        {this.props.title}
-                    </h3>
-                </div>
+                        <h3 style={titleStyle}>
+                            {this.props.title}
+                        </h3>
+                    </div>
 
-            </Button>
+                </Button>
+            </span>
         );
     }
 }
