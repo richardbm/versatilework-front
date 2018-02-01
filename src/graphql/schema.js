@@ -7,7 +7,7 @@ const typeDef = `
     type Activity {
         id: ID!,
         title: String,
-        img: String
+        img: String,
         author: String,
         type: TypeActivity
     }
@@ -16,8 +16,26 @@ const typeDef = `
         id: ID!
     }
     
+    type User {
+        id: ID!
+        firstName: String,
+        lastName: String,
+        email: String,
+        phone: String,
+        lastJoin: String,
+        facebookPictureUrl: String
+    }
+    
+    type Category {
+        id: ID!
+        name: String
+    }
+    
     type Query {
-        activity: [Activity]
+        activity: [Activity],
+        detailActivity: Activity,
+        me: User,
+        category: [Category]
     }
 `;
 

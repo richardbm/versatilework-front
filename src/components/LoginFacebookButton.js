@@ -38,14 +38,19 @@ class LoginFacebook extends Component {
     }
 
     _facebookCallback(facebookResponse) {
-        console.log("pasa");
 
         if (facebookResponse.status === 'connected') {
             const facebookToken = facebookResponse.authResponse.accessToken;
-            const graphcoolResponse = this.props.authenticateUserMutation({variables: { facebookToken }});
-            const graphcoolToken = graphcoolResponse.data.authenticateUser.token;
-            localStorage.setItem('graphcoolToken', graphcoolToken);
-            window.location.reload()
+            this.props.authenticateUserMutation({variables: { facebookToken }})
+                .then(response => {
+                    const token = response.data.authenticateUser.key;
+                    localStorage.setItem('token', token);
+                    window.location.reload();
+                })
+                .catch(() =>
+                    console.warn(`User did not authorize the Facebook application.`)
+                );
+
         } else {
             console.warn(`User did not authorize the Facebook application.`)
         }
@@ -57,83 +62,36 @@ class LoginFacebook extends Component {
         }, {scope: 'public_profile,email'})
     }
 
-
-
-    _isLoggedIn () {
-        return this.props.data.loggedInUser &&
-            this.props.data.loggedInUser.id &&
-            this.props.data.loggedInUser.id !== ''
-    }
-
-    _logout () {
-        localStorage.removeItem('graphcoolToken');
-        window.location.reload()
-    }
-
-
     render () {
-        if (this._isLoggedIn()) {
-            return this.renderLoggedIn()
-        } else {
-            return this.renderLoggedOut()
-        }
-
-    }
-
-    renderLoggedIn() {
-        return (
-            <div>
-        <span>
-          Logged in as ${this.props.data.loggedInUser.id}
-        </span>
-                <div className='pv3'>
-          <span
-              className='dib bg-red white pa3 pointer dim'
-              onClick={this._logout}
-          >
-            Logout
-          </span>
-                </div>
-            </div>
-        )
-    }
-
-    renderLoggedOut() {
         return (
             <div>
                 <div className='pv3'>
                     <div>
-            <span
-                onClick={this._handleFBLogin}
-                className='dib pa3 white bg-blue dim pointer'
-            >
-              Log in with Facebook
-            </span>
+                        <span
+                            onClick={this._handleFBLogin}
+                            className='dib pa3 white bg-blue dim pointer'
+                        >
+                          Log in with Facebook
+                        </span>
                     </div>
-                    <span>Log in to create new posts</span>
                 </div>
             </div>
         )
+
     }
 }
 
-const LOGGED_IN_USER = gql`
-    query LoggedInUser {
-        loggedInUser {
-            id
-        }
-    }
-`
 
 const AUTHENTICATE_FACEBOOK_USER = gql`
     mutation AuthenticateUserMutation($facebookToken: String!) {
         authenticateUser(facebookToken: $facebookToken) {
-            token
+            key
         }
     }
 `
 
-export default compose(
-    graphql(AUTHENTICATE_FACEBOOK_USER, { name: 'authenticateUserMutation' }),
-    graphql(LOGGED_IN_USER, { options: { fetchPolicy: 'network-only'}})
-) (withRouter(LoginFacebook))
+const withRouterStyle = withRouter(LoginFacebook);
+export default graphql(
+    AUTHENTICATE_FACEBOOK_USER,
+    { name: 'authenticateUserMutation' })
+    (withRouterStyle)

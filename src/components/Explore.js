@@ -13,6 +13,8 @@ import gql from 'graphql-tag';
 import {
     graphql,
 } from 'react-apollo';
+import { LinearProgress } from 'material-ui/Progress';
+
 
 const Promise = global.Promise;
 
@@ -138,7 +140,6 @@ const queryOptions = {
             activity,
             currentUser,
             loadMoreEntries() {
-                console.log("more items loaded");
                 return fetchMore({
                     // query: ... (you can specify a different query. FEED_QUERY is used by default)
                     variables: {

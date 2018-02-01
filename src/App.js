@@ -14,6 +14,10 @@ import NotificationView from './views/NotificationsView';
 import AddView from "./views/AddView";
 import { connect } from 'react-redux';
 import { CHANGE_MAIN_TAB } from './constants/actionTypes';
+import SupplyFormView from './views/SupplyFormView';
+import DemandFormView from './views/DemandFormView';
+import DetailActivityView from './views/DetailActivityView';
+import AddResponseView from './views/AddResponseView';
 
 import {
     Route,
@@ -67,8 +71,10 @@ class App extends Component {
                             <Route extact path='/add' component={AddView}/>
                             <Route extact path='/notifications' component={NotificationView}/>
                             <Route extact path='/profile' component={ProfileView}/>
-                            <Route extact path='/add-supply' component={NotificationView}/>
-                            <Route extact path='/add-supply' component={NotificationView}/>
+                            <Route extact path='/add-supply' component={SupplyFormView}/>
+                            <Route extact path='/add-demand' component={DemandFormView}/>
+                            <Route path='/activity/:id' component={DetailActivityView}/>
+                            <Route path='/add-response/:id' component={AddResponseView}/>
 
                             <Route path='/' render={() => (<Redirect to="/explore"/>)}/>
                           </Switch>

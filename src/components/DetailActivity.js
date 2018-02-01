@@ -16,6 +16,7 @@ import classNames from 'classnames';
 import LoginFacebookButton from './LoginFacebookButton.js';
 import Button from 'material-ui/Button';
 import Loader from './Loader';
+import { Link } from 'react-router-dom';
 
 
 const styles = theme => ({
@@ -47,7 +48,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-class Profile extends Component {
+class DetailActivity extends Component {
 
     constructor(props) {
         super(props);
@@ -56,53 +57,44 @@ class Profile extends Component {
             this.props.autDiscardToken();
             window.location.reload();
         };
-        this.handleLogout = this.handleLogout.bind(this);
     }
 
-    handleLogout(e) {
-        this.logout();
-    }
 
     render() {
         const { classes } = this.props;
-        let imageUrl = 'assets/favicon.ico';
-        let fullName = '';
-        let user = this.props.me;
-        let { loading } = this.props;
-
+        let { loading, activity } = this.props;
         if (loading) {
             return (
                 <Loader />
             )
         }
 
-        if (user) {
-            imageUrl = user.facebookPictureUrl || '';
-            fullName = user.firstName +" "+user.lastName;
-        }
         return (
             <div>
                 <Paper className={classes.root} elevation={4}>
                     <div className={classes.row}>
-                        <Avatar
-                            src={imageUrl}
-                            className={classNames(classes.avatar, classes.bigAvatar)}
-                        />
+                        {activity.firstImage ?
+                            <Avatar
+                                src={activity.firstImage}
+                                className={classNames(classes.avatar, classes.bigAvatar)}
+                            />
+                            :
+                            <div></div>
+                        }
                     </div>
                     <Typography type="headline" style={{textAlign:"center"}} component="h3">
-                        {fullName}
+                        {activity.title}
                     </Typography>
 
                 </Paper>
-
+                <Typography type="headline" style={{textAlign:"center"}} component="p">
+                    {activity.description}
+                </Typography>
                 <div style={{margin:"50px"}}>
-                    {!user ?
-                        <LoginFacebookButton />
-                        :
-                        <Button raised component="span" onClick={this.handleLogout}>
-                            Logout
-                        </Button>
-                    }
+                    <Button raised component={Link} to={`/add-response/${activity.id}`}>
+                        Response
+                    </Button>
+
                 </div>
 
             </div>
@@ -110,28 +102,55 @@ class Profile extends Component {
     }
 }
 
-const PROFILE_QUERY = gql`
-    query currentUser {
-        me {
+const DETAIL_ACTIVITY_QUERY = gql`
+    query DetailActivityQuery ($id: ID!){
+        detailActivity (id: $id){
             id
-            firstName
-            lastName
-            facebookPictureUrl
+            title
+            description
+            firstImage
+            typeActivity
+            date
+            typeActivityDisplay
+            owner {
+                id
+                firstName
+                lastName
+                phone
+            }
+            category {
+                icon
+                iconColor
+                backgroundColor
+            }
+
         }
     }
 `;
 
-
 const queryOptions = {
 
-    options:  {
-        fetchPolicy: 'network-only',
+    options: ({match}) => {
+        let id = match.params.id;
+
+        return {
+            variables: {
+                id: id,
+            },
+            fetchPolicy: 'network-only',
+        };
     },
-    props: ({ data: { loading, me } }) => ({
-            loading, me
-    }),
+    props: ({data: {loading, detailActivity}}) => {
+        return {
+
+                loading,
+                activity:detailActivity,
+
+        }
+    }
 };
 
-const ProfileWithData = graphql(PROFILE_QUERY, queryOptions)(withStyles(styles)(Profile));
 
-export default connect(null, mapDispatchToProps)(ProfileWithData);
+const DetailActivityWithData = graphql(DETAIL_ACTIVITY_QUERY, queryOptions)(withStyles(styles)(DetailActivity));
+
+export default DetailActivityWithData;

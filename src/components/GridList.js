@@ -4,13 +4,11 @@ import { withStyles } from 'material-ui/styles';
 import { GridList, GridListTile, GridListTileBar } from 'material-ui/GridList';
 import Subheader from 'material-ui/List/ListSubheader';
 import IconButton from 'material-ui/IconButton';
-import InfoIcon from 'material-ui-icons/Info';
 import Replay from 'material-ui-icons/Replay';
 import CategoryIconComponent from "./CategoryIcon";
-import { DEMAND } from '../constants/constExplorer';
-import  Moment  from 'react-moment';
-import InfiniteScroll from 'react-infinite-scroll';
 import TypeActivityIcon from "../elements/TypeActivityIcon";
+import Loader from './Loader';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     container: {
@@ -26,26 +24,10 @@ const styles = theme => ({
     },
 });
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
 function TitlebarGridList(props) {
 
     const {classes} = props;
+
 
     return (
         <div className={classes.container}>
@@ -65,6 +47,7 @@ function TitlebarGridList(props) {
                 </GridListTile>
                     {props.data.loading === false ? props.data.activity.map(obj => (
                             <GridListTile
+                                component={Link} to={`/activity/${obj.id}`}
                                 style={{
                                      backgroundColor: "rgba(231,238,210,0.5)",
                                    // backgroundColor: "rgba(0,0,0,0.5)",
@@ -122,7 +105,7 @@ function TitlebarGridList(props) {
                                 />
                             </GridListTile>
                         )) :
-                        <p>Loading</p>
+                        <Loader/>
 
                     }
                     <div style={{height: "50px"}}>
