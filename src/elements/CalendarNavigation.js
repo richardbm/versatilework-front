@@ -18,6 +18,9 @@ class LabelNavigation extends React.Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            value: 'recents',
+        };
         this.handleChange = this.handleChange.bind(this);
     }
 

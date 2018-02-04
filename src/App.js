@@ -8,8 +8,10 @@ import ExploreIcon from 'material-ui-icons/Explore';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import DateRange from 'material-ui-icons/DateRange';
 import AddCircle from 'material-ui-icons/AddCircle';
+import EventIcon from 'material-ui-icons/Event';
 import Notifications from 'material-ui-icons/Notifications';
 import ExploreView from './views/ExploreView';
+import CalendarView from './views/CalendarView';
 import NotificationView from './views/NotificationsView';
 import AddView from "./views/AddView";
 import { connect } from 'react-redux';
@@ -18,7 +20,11 @@ import SupplyFormView from './views/SupplyFormView';
 import DemandFormView from './views/DemandFormView';
 import DetailActivityView from './views/DetailActivityView';
 import AddResponseView from './views/AddResponseView';
-
+import PrivateRoute from './components/PrivateRoute';
+import gql from 'graphql-tag';
+import {
+    graphql,
+} from 'react-apollo';
 import {
     Route,
     Link,
@@ -26,6 +32,7 @@ import {
     Switch
 } from 'react-router-dom'
 import ProfileView from "./views/ProfileView";
+import Loader from './components/Loader';
 
 function TabContainer({ children, dir }) {
     return (
@@ -60,6 +67,18 @@ class App extends Component {
 
     render() {
         const { classes, theme } = this.props;
+        let { loading, me } = this.props;
+        let authed = false;
+
+        if (loading) {
+            return (
+                <Loader />
+            )
+        }
+
+        if (!!me) {
+            authed=true;
+        }
 
         return (
                 <span>
@@ -68,13 +87,14 @@ class App extends Component {
                         <div className={classes.root} style={{position: "absolute", width: "100%", top:58 }}>
                           <Switch>
                             <Route extact path='/explore' component={ExploreView}/>
-                            <Route extact path='/add' component={AddView}/>
-                            <Route extact path='/notifications' component={NotificationView}/>
-                            <Route extact path='/profile' component={ProfileView}/>
-                            <Route extact path='/add-supply' component={SupplyFormView}/>
-                            <Route extact path='/add-demand' component={DemandFormView}/>
-                            <Route path='/activity/:id' component={DetailActivityView}/>
-                            <Route path='/add-response/:id' component={AddResponseView}/>
+                            <PrivateRoute authed={authed} extact path='/add' component={AddView}/>
+                            <PrivateRoute authed={authed} extact path='/notifications' component={NotificationView}/>
+                            <Route authed={authed} extact path='/calendar' component={CalendarView}/>
+                            <Route authed={authed} extact path='/profile' component={ProfileView}/>
+                            <PrivateRoute authed={authed} extact path='/add-supply' component={SupplyFormView}/>
+                            <PrivateRoute authed={authed} extact path='/add-demand' component={DemandFormView}/>
+                            <PrivateRoute authed={authed} path='/activity/:id' component={DetailActivityView}/>
+                            <PrivateRoute authed={authed} path='/add-response/:id' component={AddResponseView}/>
 
                             <Route path='/' render={() => (<Redirect to="/explore"/>)}/>
                           </Switch>
@@ -92,7 +112,7 @@ class App extends Component {
                                 textColor="#009688"
                                 centered>
                                 <Tab icon={<ExploreIcon />} component={Link} to="/explore" value="/explore" />
-                                <Tab icon={<DateRange />} component={Link} to="/calendar" value="/calendar" />
+                                <Tab icon={<EventIcon />} component={Link} to="/calendar" value="/calendar" />
                                 <Tab icon={<AddCircle />} component={Link} to="/add" value="/add" />
                                 <Tab icon={<Notifications />} component={Link} to="/notifications" value="/notifications" />
                                 <Tab icon={<AccountCircle />} component={Link} to="/profile" value="/profile" />
@@ -103,8 +123,31 @@ class App extends Component {
   }
 }
 
+
+const PROFILE_QUERY = gql`
+    query currentUser {
+        me {
+            id
+        }
+    }
+`;
+
+
+const queryOptions = {
+
+    options:  {
+        fetchPolicy: 'network-only',
+    },
+    props: ({ data: { loading, me } }) => ({
+        loading, me
+    }),
+};
+
 App.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(App));
+
+let AppWithStyles = withStyles(styles, { withTheme: true })(App);
+let AppWithData = graphql(PROFILE_QUERY, queryOptions)(AppWithStyles);
+export default connect(mapStateToProps, mapDispatchToProps)(AppWithData);

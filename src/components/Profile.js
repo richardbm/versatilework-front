@@ -42,6 +42,7 @@ const mapDispatchToProps = dispatch => ({
     autDiscardToken: () => {
         dispatch({ type: AUTH_DISCARD_TOKEN });
         localStorage.removeItem('token');
+        localStorage.removeItem('meId');
     },
 
 });

@@ -13,11 +13,11 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import Avatar from 'material-ui/Avatar';
 import classNames from 'classnames';
-import LoginFacebookButton from './LoginFacebookButton.js';
 import Button from 'material-ui/Button';
 import Loader from './Loader';
 import { Link } from 'react-router-dom';
-
+import ResponsesList from './ResponsesList';
+import AddResponse from './AddResponse';
 
 const styles = theme => ({
     root: theme.mixins.gutters({
@@ -53,10 +53,6 @@ class DetailActivity extends Component {
     constructor(props) {
         super(props);
 
-        this.logout = () => {
-            this.props.autDiscardToken();
-            window.location.reload();
-        };
     }
 
 
@@ -72,28 +68,32 @@ class DetailActivity extends Component {
         return (
             <div>
                 <Paper className={classes.root} elevation={4}>
-                    <div className={classes.row}>
-                        {activity.firstImage ?
-                            <Avatar
-                                src={activity.firstImage}
-                                className={classNames(classes.avatar, classes.bigAvatar)}
-                            />
-                            :
-                            <div></div>
-                        }
-                    </div>
                     <Typography type="headline" style={{textAlign:"center"}} component="h3">
                         {activity.title}
                     </Typography>
 
+                    <Typography type="headline" style={{textAlign:"justify", fontSize: 18, margin:10}} component="p">
+                        {activity.description}
+                    </Typography>
                 </Paper>
-                <Typography type="headline" style={{textAlign:"center"}} component="p">
-                    {activity.description}
-                </Typography>
-                <div style={{margin:"50px"}}>
-                    <Button raised component={Link} to={`/add-response/${activity.id}`}>
-                        Response
+                <Paper>
+                    <Button
+                        raised
+                        component="span"
+                        style={{bottom:0, position:"relative"}}
+                        onClick={this.handleLogout}>
+                        To offer
                     </Button>
+                </Paper>
+
+                <Typography type="headline" style={{textAlign:"center"}} component="h3">
+                    Responses
+                </Typography>
+
+                <ResponsesList owner={activity.owner} responses={activity.responses}/>
+
+                <div style={{marginTop:"15px", marginLeft:"25px", marginRight:"25px", marginBottom: "65px"}}>
+                    <AddResponse activity={activity}/>
 
                 </div>
 
@@ -112,6 +112,18 @@ const DETAIL_ACTIVITY_QUERY = gql`
             typeActivity
             date
             typeActivityDisplay
+            responses {
+                id
+                description
+                date
+                owner {
+                    id
+                    firstName
+                    lastName
+                    facebookPictureUrl
+                    
+                }
+            }
             owner {
                 id
                 firstName

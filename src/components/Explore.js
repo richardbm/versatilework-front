@@ -13,10 +13,8 @@ import gql from 'graphql-tag';
 import {
     graphql,
 } from 'react-apollo';
-import { LinearProgress } from 'material-ui/Progress';
 
 
-const Promise = global.Promise;
 
 const mapStateToProps = state => ({
     ...state.explorer,
@@ -98,6 +96,7 @@ const exploreListQuery = gql`
             firstImage
             typeActivity
             date
+            status
             typeActivityDisplay
             owner {
                 id

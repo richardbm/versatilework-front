@@ -5,34 +5,19 @@ import {
     graphql,
 } from 'react-apollo';
 import { required } from '../services/validations';
+import SelectField from './CustomSelectField';
 
 
 class CategoryInput extends Component {
 
     render () {
         let { loading, category } = this.props;
-
-        if (loading) {
-            return (
-                <Field
-                    name="category"
-                    validate={required}
-                    type="select"
-                    component="select" >
-                    <option>Select</option>
-                </Field>
-            )
-        }
         return (
             <Field
                 name="categoryId"
                 validate={required}
-                component="select" >
-                <option key={0}>Select</option>
-
-                {category.map(obj =>
-                    <option key={obj.id} value={obj.id}>{obj.name} </option>
-                )}
+                category={category}
+                component={SelectField} >
             </Field>
         )
     }

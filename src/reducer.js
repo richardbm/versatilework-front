@@ -8,7 +8,7 @@ import { reducer as formReducer } from 'redux-form'
 export default combineReducers({
     commons,
     explorer,
-    auth,
+    calendar: explorer,
     router: routerReducer,
     form: formReducer
 

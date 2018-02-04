@@ -4,17 +4,7 @@ const typeDef = `
         DEMAND
     }
     
-    type Activity {
-        id: ID!,
-        title: String,
-        img: String,
-        author: String,
-        type: TypeActivity
-    }
-    
-    type LoggedInUser {
-        id: ID!
-    }
+
     
     type User {
         id: ID!
@@ -25,6 +15,29 @@ const typeDef = `
         lastJoin: String,
         facebookPictureUrl: String
     }
+    
+    type Response {
+        id: ID!,
+        description: String,
+        date: String,
+        owner: User,
+    }
+    
+    type Activity {
+        id: ID!,
+        title: String,
+        description: String,
+        date: String,
+        status: String,
+        owner: User,
+        type: TypeActivity,
+        responses: Response
+    }
+    
+    type LoggedInUser {
+        id: ID!
+    }
+
     
     type Category {
         id: ID!

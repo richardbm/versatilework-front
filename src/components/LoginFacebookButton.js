@@ -43,8 +43,10 @@ class LoginFacebook extends Component {
             const facebookToken = facebookResponse.authResponse.accessToken;
             this.props.authenticateUserMutation({variables: { facebookToken }})
                 .then(response => {
-                    const token = response.data.authenticateUser.key;
+                    let authenticateUser = response.data.authenticateUser;
+                    const token = authenticateUser.key;
                     localStorage.setItem('token', token);
+                    localStorage.setItem('meId', authenticateUser.user.id);
                     window.location.reload();
                 })
                 .catch(() =>
@@ -86,6 +88,9 @@ const AUTHENTICATE_FACEBOOK_USER = gql`
     mutation AuthenticateUserMutation($facebookToken: String!) {
         authenticateUser(facebookToken: $facebookToken) {
             key
+            user {
+                id
+            }
         }
     }
 `

@@ -5,8 +5,7 @@ import { required } from '../services/validations';
 import { SUPPLY } from '../constants/constExplorer';
 import SupplyForm from '../components/SupplyForm';
 import gql from 'graphql-tag';
-import TextField from '../elements/TextField';
-
+import { history } from '../store/configureStore';
 import {
     graphql,
 } from 'react-apollo';
@@ -25,7 +24,8 @@ class SupplyFormView extends Component {
                 }
              })
             .then(response => {
-                console.log(response);
+                history.push(`/#/activity/${response.data.createActivity.id}`);
+                window.location.reload();
             })
             .catch(() =>
                 console.warn(`supply not saved`)
@@ -35,7 +35,9 @@ class SupplyFormView extends Component {
     render () {
 
         return (
-            <SupplyForm onSubmit={this.handleSubmit}/>
+            <SupplyForm
+                title="Publish Supply"
+                onSubmit={this.handleSubmit}/>
         )
     }
 }

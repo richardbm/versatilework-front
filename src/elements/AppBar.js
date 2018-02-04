@@ -34,9 +34,7 @@ class PrincipalAppBar extends Component {
     return (
         <AppBar className={classes.root}>
             <Toolbar>
-                    <IconButton style={{position: "absolute", left:15}} >
-                        <Help color="rgba(255, 255, 255, 0.54)" />
-                    </IconButton>
+
                 <Typography  type="title" color="inherit" style={{position: "relative", width: "100%"}} >
                     <span style={{
                         position: "absolute",
@@ -45,7 +43,7 @@ class PrincipalAppBar extends Component {
                         width: "100%",
                         textAlign: "center",
                     }}>
-                        Title
+                        Versatile Work
                     </span>
                 </Typography>
             </Toolbar>
